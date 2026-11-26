@@ -5,11 +5,21 @@ const b=normalize({number:'2',to:'Gare',stop:{departure:t,delay:3,platform:'A',p
 const c=normalize({cancelled:true,stop:{departure:t,prognosis:{departure:'2026-11-26T17:37:00+01:00'}}});assert.equal(c.cancelled,true);assert.equal(c.delay,2);
 assert.deepEqual(visible([b,a],'1',ms-1000),[a]);assert.equal(visible([a],'',ms+61000).length,0);assert.equal(countdown(ms,ms-61000),'2 min');assert.equal(normalize({}).effective,null);console.log('Tests core OK');
 
-import {routeOptions,routeVisible,routeKey,migrateFavorites} from './core.mjs';
-const routes=[{...a,line:'2',to:'Schönberg'},{...a,line:'2',to:'Villars'},{...a,line:'10',to:'Gare'}];
-assert.deepEqual(routeOptions(routes,'2'),{lines:['2','10'],destinations:['Schönberg','Villars']});
-assert.deepEqual(routeVisible(routes,'2','Villars',ms-1000),[routes[1]]);
-assert.deepEqual(routeOptions([],'2','Villars'),{lines:['2'],destinations:['Villars']});
+import {routeOptions,routeVisible,routeKey,migrateFavorites,selectionsFromRoute,toggleLine,setDirection} from './core.mjs';
+const routes=[{...a,line:'2',to:'Schönberg',effective:ms+180000},{...a,line:'2',to:'Villars'},{...a,line:'10',to:'Gare',effective:ms+60000},{...a,line:'10',to:'Autre'},{...a,line:'3',to:'Gare'}];
+let selection=toggleLine([],'2');selection=setDirection(selection,'2','Schönberg');selection=toggleLine(selection,'10');selection=setDirection(selection,'10','Gare');
+assert.deepEqual(routeOptions(routes,selection).lines,['2','3','10']);
+assert.deepEqual(routeOptions(routes,selection).destinations('2'),['Schönberg','Villars']);
+assert.deepEqual(routeVisible(routes,selection,ms-1000),[routes[2],routes[0]]);
+assert.deepEqual(routeOptions([],selection).destinations('10'),['Gare']);
+assert.deepEqual(routeVisible(routes,toggleLine(selection,'2'),ms-1000),[routes[2]]);
+assert.equal(routeVisible(routes,toggleLine(selection,''),ms-1000).length,5);
+assert.deepEqual(routeVisible(routes,setDirection([],'','Gare'),ms-1000),[routes[4],routes[2]]);
+assert.equal(routeKey({id:'1',selections:selection}),routeKey({id:'1',selections:[...selection].reverse()}));
+assert.equal(routeKey({id:'1',line:'2',direction:'Villars'}),routeKey({id:'1',selections:[{line:'2',direction:'Villars'}]}));
 assert.notEqual(routeKey({id:'1',line:'2',direction:'Villars'}),routeKey({id:'1',line:'2',direction:'Schönberg'}));
-assert.deepEqual(migrateFavorites([{id:1,name:'Gare'}]),[{id:'1',name:'Gare',mode:'bus',line:'',direction:'',label:''}]);
-console.log('Tests trajets OK');
+assert.deepEqual(migrateFavorites([{id:1,name:'Gare'}]),[{id:'1',name:'Gare',mode:'bus',selections:[],label:''}]);
+assert.deepEqual(migrateFavorites([{id:1,name:'Gare',line:'2',direction:'Villars',label:'Soir'}])[0].selections,[{line:'2',direction:'Villars'}]);
+assert.deepEqual(selectionsFromRoute({direction:'Gare'}),[{line:'',direction:'Gare'}]);
+assert.deepEqual(selectionsFromRoute({line:'2',direction:'Gare'}),[{line:'2',direction:'Gare'}]);
+console.log('Tests multi-lignes OK');
