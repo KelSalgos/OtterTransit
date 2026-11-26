@@ -1,4 +1,4 @@
-# OtterTransit v0.3 🦦
+# OtterTransit v0.4 🦦
 Page web statique, en français, pour les prochains départs en Suisse. Bus par défaut. Aucun compte ni clé API.
 
 ## Démarrer (Windows)
@@ -21,10 +21,17 @@ Publier les fichiers sur un hébergement statique HTTPS (GitHub Pages, Cloudflar
 - Les recherches sont envoyées à transport.opendata.ch; aucune localisation GPS n'est demandée.
 
 ## API
-https://transport.opendata.ch/docs.html — endpoints /locations et /stationboard. Données nationales : https://opentransportdata.swiss/.
+https://transport.opendata.ch/docs.html — endpoints /locations, /stationboard et /connections. Données nationales : https://opentransportdata.swiss/.
 
 ## Tests
 `node core.test.mjs` (Node.js facultatif). Tests unitaires sur timestamps, retard, quai modifié, suppression, filtre, compte à rebours. Tests unitaires supplémentaires : sélection multiple, destinations par ligne, tri, migration et clés de favoris. Le test navigateur a été bloqué par la politique réseau de l’environnement ; aucun test sur données TPF réelles pour cette version.
 
 ## Suite possible
 Temps de marche configurable, mode maison/boulot, intégration OtterHub. Historique des retards seulement avec collecte serveur et respect des limites de l'API.
+
+## v0.4 — Itinéraires
+- Onglet indépendant : recherche de deux arrêts identifiés, inversion, départ immédiat ou date/heure de départ/arrivée (heure suisse), filtre transport, marge minimale de correspondance. Six connexions demandées (l’API peut en retourner davantage).
+- Détail des étapes, marche, arrêts intermédiaires si fournis, heures estimées, retards, quais et suppressions si disponibles. Les marges calculées sont indicatives et ne garantissent pas la correspondance.
+- Favoris d’itinéraires enregistrés localement, sans date/heure (ouvrent un départ immédiat). Favoris de départs existants conservés.
+- Actualisation automatique des itinéraires toutes les 45 secondes lorsqu’ils sont visibles; les résultats d’une recherche immédiate peuvent évoluer.
+- Tests : `node core.test.mjs` et `node journey.test.mjs`. Aucun déploiement automatique depuis cette archive.
