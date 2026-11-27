@@ -28,9 +28,9 @@ function period(block,observedAt){
  return {start:null,end:null,approximate:false};
 }
 function notice(block,observedAt,i){
- const token='(?:[A-Z]{0,3}\\d{1,3})';
+ const token='(?:[A-Z]{0,3}\\d{1,4})';
  const pattern=new RegExp('\\blignes?\\s*(?:n(?:°|º|o)\\s*)?('+token+'(?:(?:\\s*[,;/]\\s*|\\s+(?:et|ou)\\s+|[ \\t]+)'+token+')*)(?![\\w:])','gi');
- const groups=[...block.matchAll(pattern)].map(m=>m[1].split(/\s*[,;/]\s*|\s+(?:et|ou)\s+|[ \t]+/i).map(s=>s.toUpperCase()).filter(s=>/^[A-Z]{0,3}\d{1,3}$/.test(s)).sort());
+ const groups=[...block.matchAll(pattern)].map(m=>m[1].split(/\s*[,;/]\s*|\s+(?:et|ou)\s+|[ \t]+/i).map(s=>s.toUpperCase()).filter(s=>/^[A-Z]{0,3}\d{1,4}$/.test(s)).sort());
  const distinct=new Set(groups.map(g=>JSON.stringify([...new Set(g)])));
  // Different scopes in an unseparated notice are ambiguous: show only a general warning.
  const lines=distinct.size===1?[...new Set(groups[0])].sort((a,b)=>a.localeCompare(b,'fr',{numeric:true})):[];
@@ -66,7 +66,7 @@ export function parsePlanned(text,observedAt){
  if(!details||!Number.isFinite(now))return {plannedStatus:'unknown',planned:[]};
  const body=section.slice(details.index+details[0].length).split(/questions fréquemment posées/i)[0];
  const starts=[...body.matchAll(new RegExp('\\bDu\\s*:\\s*'+dateField,'gi'))];
- const found=new Map();let skipped=0;
+ const found=new Map();let skipped=/OTTER_PARTIAL_COVERAGE/.test(body)?1:0;
  for(let i=0;i<starts.length;i++){
   const m=starts[i],block=body.slice(m.index,starts[i+1]?.index??body.length);
   const e=block.match(new RegExp('\\bAu\\s*:\\s*'+dateField,'i'));

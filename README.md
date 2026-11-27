@@ -56,3 +56,6 @@ Extraction expérimentale de périodes horaires le jour suisse de collecte (14h0
 
 ## v0.9 — OtterAlert 48H
 Collecte prévue toutes les 15 minutes via GitHub Actions (sans garantie de ponctualité). Les annonces structurées Du/Au sont extraites, dédoublonnées et affichées si elles chevauchent les 48 prochaines heures. Les plages nocturnes quotidiennes explicites sont calculées séparément; les restrictions complexes non interprétables restent informatives sans association aux trajets. Un rendu Chromium de secours tente de lire les fiches si le HTML brut ne les expose pas. Si indisponibles, l'interface indique que la collecte planifiée n'est pas confirmée. Aucun serveur ni modification de l'hébergement. Le rapprochement reste indicatif, par transporteur, ligne et intervalle. Le rendu du site réel et la couverture exhaustive des fiches restent à vérifier.
+
+## v0.9.1 — Correction du collecteur
+Le runner est fixé à Ubuntu 24.04 pour Playwright. Le navigateur tente les filtres de lignes publics et fusionne les fiches extraites; une couverture partielle est signalée. Test de régression sur les deux travaux de longue durée de la ligne 336 signalés par un utilisateur. Les interactions sur le site réel restent à valider. La programmation aux quarts d'heure est conservée.

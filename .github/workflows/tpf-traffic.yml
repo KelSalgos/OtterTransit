@@ -18,8 +18,8 @@ concurrency:
   cancel-in-progress: false
 jobs:
   collect:
-    runs-on: ubuntu-latest
-    timeout-minutes: 8
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
       - name: Test matching and parser
@@ -34,7 +34,7 @@ jobs:
         run: |
           set -euo pipefail
           if node -e 'const d=require(process.argv[1]);process.exit(d.plannedStatus==="unknown"?0:1)' "$RUNNER_TEMP/alerts.json"; then
-            if python3 -m pip install --quiet playwright==1.51.0 && python3 -m playwright install chromium && python3 scripts/collect-tpf-browser.py > "$RUNNER_TEMP/tpf-rendered.txt" && node scripts/collect-tpf.mjs "$RUNNER_TEMP/rendered-alerts.json" < "$RUNNER_TEMP/tpf-rendered.txt"; then
+            if python3 -m pip install --quiet playwright==1.51.0 && python3 -m playwright install --with-deps chromium && python3 scripts/collect-tpf-browser.py > "$RUNNER_TEMP/tpf-rendered.txt" && node scripts/collect-tpf.mjs "$RUNNER_TEMP/rendered-alerts.json" < "$RUNNER_TEMP/tpf-rendered.txt"; then
               node -e 'const fs=require("fs"),a=JSON.parse(fs.readFileSync(process.argv[1])),b=JSON.parse(fs.readFileSync(process.argv[2]));if(b.plannedStatus!=="unknown"){a.plannedStatus=b.plannedStatus;a.planned=b.planned;fs.writeFileSync(process.argv[1],JSON.stringify(a,null,2)+"\n")}' "$RUNNER_TEMP/alerts.json" "$RUNNER_TEMP/rendered-alerts.json"
             else
               echo "::warning::Planned notices could not be rendered; publishing current data with unknown planned coverage."

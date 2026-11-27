@@ -47,3 +47,11 @@ assert.equal(matchingAlerts(pd,{operator:'TPF',line:'9',start:atTime('28T02:00')
 assert.equal(matchingAlerts(pd,{operator:'TL',line:'9',start:atTime('28T18:00')},now).length,0);
 assert.equal(parseTpfText('Info trafic\nAucune perturbation sur le réseau TPF\nTravaux et manifestations',at).plannedStatus,'unknown');
 console.log('TPF planned 48h tests OK');
+
+const userFixture='Info trafic\nAucune perturbation sur le réseau TPF\nTravaux et manifestations\nInformations détaillées\nDu : 27.08.2026 - 05:00\nAu : 10.07.2027 - 18:00\nCause: travaux\nEn cours\nLa restriction dure du 27.08.2026, 05:00 au 10.07.2027, 18:00.\nLa ligne 336 est concernée.\nDu : 26.03.2026 - 05:00\nAu : 18.12.2026 - 17:00\nCause: travaux\nEn cours\nLa restriction dure du 26.03.2026, 05:00 au 18.12.2026, 17:00.\nLes lignes 336, 471 et N25 sont concernées.';
+const userData=parseTpfText(userFixture,at);
+assert.equal(userData.plannedStatus,'available');
+assert.equal(matchingAlerts(userData,{operator:'TPF',line:'B 336',start:atTime('27T22:08'),end:atTime('27T23:06')},now).length,2);
+assert.equal(matchingAlerts(userData,{operator:'TPF',line:'B 337',start:atTime('27T22:08'),end:atTime('27T23:06')},now).length,0);
+assert.equal(parseTpfText(userFixture.replace('Informations détaillées','Informations détaillées\nOTTER_PARTIAL_COVERAGE'),at).plannedStatus,'partial');
+console.log('TPF 336 regression tests OK');
