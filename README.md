@@ -1,4 +1,4 @@
-# OtterTransit v0.6 🦦
+# OtterTransit v0.7 🦦
 Page web statique, en français, pour les prochains départs en Suisse. Bus par défaut. Aucun compte ni clé API.
 
 ## Démarrer (Windows)
@@ -44,3 +44,6 @@ Temps de marche configurable, mode maison/boulot, intégration OtterHub. Histori
 
 ## v0.6 — Radar natif
 Carte Leaflet sans iframe, tuiles swisstopo, arrêts et véhicules estimés via /v2/map/stations, /vehicles et /trip. Filtres par type et nom/numéro de ligne (plusieurs séparés par virgules), recherche et centrage sur l'arrêt du tableau, détails des arrêts et courses, plein écran selon navigateur. Le radar interroge les véhicules toutes les 15 s et interpole toutes les secondes, uniquement en vue active; les positions ne sont pas du GPS. Les destinations du tableau ne sont pas automatiquement appliquées au radar (le segment fournit le prochain arrêt, pas le terminus). Les bus peuvent être représentés en ligne droite. En cas d'échec les positions sont masquées, la carte originale reste accessible. Les favoris restent locaux et les départs limités à 35 min. Tests purs : node radar.test.mjs. Les appels réseau et le rendu réel sont à vérifier sur GitHub Pages; Leaflet et les tuiles nécessitent Internet. Voir THIRD_PARTY_NOTICES.md.
+
+## v0.7 — Lignes autorisées dans les itinéraires
+La recherche demande jusqu'à 16 itinéraires à l'API. Les lignes détectées dans les résultats sont proposées sous forme de boutons multisélection. Toutes désactive le filtre. Une sélection impose que chaque trajet motorisé utilise une ligne choisie (catégorie + numéro, comme B 2) ; la marche reste autorisée. Ce filtre local ne force pas le calculateur distant à inventer des alternatives et ne couvre que les itinéraires reçus. Les lignes choisies restent disponibles pendant l'actualisation, même si elles disparaissent des résultats. Les favoris mémorisent leur propre liste de lignes, y compris après rechargement, et les anciens favoris restent compatibles (toutes les lignes). Les variantes de lignes peuvent être enregistrées séparément pour le même trajet. Pas de modification du radar ni du tableau des départs. Tests : node journey.test.mjs.
