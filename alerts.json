@@ -1,9 +1,243 @@
 {
   "version": 1,
-  "observedAt": "2026-11-27T21:05:07.151Z",
+  "observedAt": "2026-11-27T21:07:42.877Z",
   "status": "clear",
   "alerts": [],
   "coverage": "current-and-planned-48h",
-  "plannedStatus": "unknown",
-  "planned": []
+  "plannedStatus": "partial",
+  "planned": [
+    {
+      "id": "tpf-planned-14",
+      "lines": [
+        "336",
+        "471",
+        "N25"
+      ],
+      "start": "2026-03-26T04:00:00.000Z",
+      "end": "2026-12-18T16:00:00.000Z",
+      "cause": "Travaux",
+      "timing": "continuous",
+      "windows": [
+        {
+          "start": "2026-03-26T04:00:00.000Z",
+          "end": "2026-12-18T16:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "tpf-planned-20",
+      "lines": [
+        "553"
+      ],
+      "start": "2026-03-30T05:00:00.000Z",
+      "end": "2027-06-18T15:00:00.000Z",
+      "cause": "Travaux",
+      "timing": "continuous",
+      "windows": [
+        {
+          "start": "2026-03-30T05:00:00.000Z",
+          "end": "2027-06-18T15:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "tpf-planned-4",
+      "lines": [
+        "6"
+      ],
+      "start": "2026-04-27T02:00:00.000Z",
+      "end": "2027-03-26T16:00:00.000Z",
+      "cause": "Travaux",
+      "timing": "unconfirmed",
+      "windows": []
+    },
+    {
+      "id": "tpf-planned-8",
+      "lines": [
+        "9"
+      ],
+      "start": "2026-08-17T03:00:00.000Z",
+      "end": "2026-12-31T04:00:00.000Z",
+      "cause": "Travaux",
+      "timing": "continuous",
+      "windows": [
+        {
+          "start": "2026-08-17T03:00:00.000Z",
+          "end": "2026-12-31T04:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "tpf-planned-13",
+      "lines": [
+        "336"
+      ],
+      "start": "2026-08-27T03:00:00.000Z",
+      "end": "2027-07-10T16:00:00.000Z",
+      "cause": "Travaux",
+      "timing": "continuous",
+      "windows": [
+        {
+          "start": "2026-08-27T03:00:00.000Z",
+          "end": "2027-07-10T16:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "tpf-planned-9",
+      "lines": [],
+      "start": "2026-08-27T05:00:00.000Z",
+      "end": "2026-12-05T06:00:00.000Z",
+      "cause": "Travaux",
+      "timing": "continuous",
+      "windows": [
+        {
+          "start": "2026-08-27T05:00:00.000Z",
+          "end": "2026-12-05T06:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "tpf-planned-12",
+      "lines": [
+        "259"
+      ],
+      "start": "2026-09-28T07:00:00.000Z",
+      "end": "2026-12-01T16:00:00.000Z",
+      "cause": "Travaux",
+      "timing": "unconfirmed",
+      "windows": []
+    },
+    {
+      "id": "tpf-planned-7",
+      "lines": [
+        "9"
+      ],
+      "start": "2026-10-12T03:00:00.000Z",
+      "end": "2026-12-18T04:00:00.000Z",
+      "cause": "Travaux",
+      "timing": "continuous",
+      "windows": [
+        {
+          "start": "2026-10-12T03:00:00.000Z",
+          "end": "2026-12-18T04:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "tpf-planned-22",
+      "lines": [
+        "RE2",
+        "RE3"
+      ],
+      "start": "2026-10-18T20:30:00.000Z",
+      "end": "2026-12-17T22:45:00.000Z",
+      "cause": "Travaux",
+      "timing": "unconfirmed",
+      "windows": []
+    },
+    {
+      "id": "tpf-planned-6",
+      "lines": [
+        "9"
+      ],
+      "start": "2026-10-19T05:00:00.000Z",
+      "end": "2026-12-31T16:00:00.000Z",
+      "cause": "Travaux",
+      "timing": "unconfirmed",
+      "windows": []
+    },
+    {
+      "id": "tpf-planned-16",
+      "lines": [
+        "474"
+      ],
+      "start": "2026-10-21T03:00:00.000Z",
+      "end": "2027-10-21T03:00:00.000Z",
+      "cause": "Travaux",
+      "timing": "continuous",
+      "windows": [
+        {
+          "start": "2026-10-21T03:00:00.000Z",
+          "end": "2027-10-21T03:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "tpf-planned-15",
+      "lines": [
+        "340",
+        "361",
+        "EV5",
+        "N13"
+      ],
+      "start": "2026-11-26T16:00:00.000Z",
+      "end": "2026-12-04T04:30:00.000Z",
+      "cause": "Travaux",
+      "timing": "daily",
+      "windows": [
+        {
+          "start": "2026-11-27T16:00:00.000Z",
+          "end": "2026-11-28T04:30:00.000Z"
+        },
+        {
+          "start": "2026-11-28T16:00:00.000Z",
+          "end": "2026-11-29T04:30:00.000Z"
+        },
+        {
+          "start": "2026-11-29T16:00:00.000Z",
+          "end": "2026-11-30T04:30:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "tpf-planned-19",
+      "lines": [
+        "496"
+      ],
+      "start": "2026-11-27T04:00:00.000Z",
+      "end": "2026-12-11T19:00:00.000Z",
+      "cause": "Perturbation annoncée",
+      "timing": "continuous",
+      "windows": [
+        {
+          "start": "2026-11-27T04:00:00.000Z",
+          "end": "2026-12-11T19:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "tpf-planned-21",
+      "lines": [
+        "RE2",
+        "RE3"
+      ],
+      "start": "2026-11-28T03:00:00.000Z",
+      "end": "2026-11-30T01:00:00.000Z",
+      "cause": "Travaux",
+      "timing": "continuous",
+      "windows": [
+        {
+          "start": "2026-11-28T03:00:00.000Z",
+          "end": "2026-11-30T01:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "tpf-planned-17",
+      "lines": [
+        "479"
+      ],
+      "start": "2026-11-28T17:10:00.000Z",
+      "end": "2026-11-28T17:25:00.000Z",
+      "cause": "Manifestation",
+      "timing": "continuous",
+      "windows": [
+        {
+          "start": "2026-11-28T17:10:00.000Z",
+          "end": "2026-11-28T17:25:00.000Z"
+        }
+      ]
+    }
+  ]
 }
