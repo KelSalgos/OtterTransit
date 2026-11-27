@@ -1,4 +1,4 @@
-# OtterTransit v0.8 🦦
+# OtterTransit v0.8.1 🦦
 Page web statique, en français, pour les prochains départs en Suisse. Bus par défaut. Aucun compte ni clé API.
 
 ## Démarrer (Windows)
@@ -50,3 +50,6 @@ La recherche demande jusqu'à 16 itinéraires à l'API. Les lignes détectées d
 
 ## v0.8 — OtterAlert (expérimental)
 Trafic TPF : GitHub Actions collecte la section des perturbations en cours de la page officielle toutes les dix minutes, au mieux, puis publie un JSON factuel dans la branche isolée traffic-data. Le site existant reste sur GitHub Pages, sans changement de mode de déploiement, sans clé API ni nouveau serveur. Le navigateur lit le JSON public via raw.githubusercontent.com toutes les deux minutes (cache et planification non garantis). En cas d'échec ou d'état inconnu, aucun trajet n'est marqué touché; les associations sont désactivées au-delà de 30 minutes. Le rapprochement utilise l'opérateur TPF, la ligne explicitement citée, et un intervalle proche de maintenant (35 minutes) faute de période structurée. Il indique une perturbation potentielle et n'infère ni suppression, ni direction, ni arrêt non desservi. Les travaux futurs ne sont pas couverts et restent accessibles sur le lien TPF. Les favoris et horaires restent inchangés. Le collecteur HTML est expérimental, dépend de la structure et disponibilité du site, et doit être vérifié sur les vrais résultats et selon les conditions de réutilisation du fournisseur. Seuls des identifiants factuels et une catégorie générique sont republiés, pas les textes ou images des annonces. Tests locaux de logique : node alerts.test.mjs. Le workflow peut nécessiter une autorisation Actions (contents: write).
+
+## v0.8.1 — Périodes des perturbations
+Extraction expérimentale de périodes horaires le jour suisse de collecte (14h00 à 19h00, 14:00 – 19:00) et fins seules (jusqu’à 19:00 environ). Séparation des annonces par dernière mise à jour lorsque disponible. Une période complète limite les associations à son intervalle, fin exclue; une fin seule limite les associations aux trajets proches/à venir avant cette fin. En l'absence de période interprétable, le comportement prudent de v0.8 reste en place. Dates sur plusieurs jours, horaires nocturnes ambigus et travaux futurs ne sont pas déduits. La première collecte v0.8 a réussi sur le site réel en état sans perturbation; l'extraction de périodes actives reste à valider sur des annonces réelles. Tests sur exemples synthétiques et formulations observées.
