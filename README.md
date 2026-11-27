@@ -1,4 +1,4 @@
-# OtterTransit v0.4 🦦
+# OtterTransit v0.5 🦦
 Page web statique, en français, pour les prochains départs en Suisse. Bus par défaut. Aucun compte ni clé API.
 
 ## Démarrer (Windows)
@@ -35,3 +35,9 @@ Temps de marche configurable, mode maison/boulot, intégration OtterHub. Histori
 - Favoris d’itinéraires enregistrés localement, sans date/heure (ouvrent un départ immédiat). Favoris de départs existants conservés.
 - Actualisation automatique des itinéraires toutes les 45 secondes lorsqu’ils sont visibles; les résultats d’une recherche immédiate peuvent évoluer.
 - Tests : `node core.test.mjs` et `node journey.test.mjs`. Aucun déploiement automatique depuis cette archive.
+
+
+## v0.5 — Radar et horizon de départs
+- Seuls les départs effectifs entre maintenant et +35 minutes inclus sont affichés. Le filtrage se recalcule chaque seconde; les courses passées disparaissent. Les options de ligne/direction continuent d'utiliser les 40 départs obtenus de l'API, même au-delà de 35 min. Les itinéraires ne sont pas limités à 35 min.
+- Nouvel onglet Radar : intégration de la carte externe https://transport.opendata.ch/examples/map.html dans une iframe, chargée uniquement quand l'onglet est ouvert, retirée en quittant l'onglet ou lorsque la page est masquée. Le lien externe reste disponible si le fournisseur bloque l'intégration. Ce n'est pas une carte native OtterTransit, elle a ses propres contrôles et ne reprend pas automatiquement les favoris ni les filtres locaux. Les positions sont estimées, pas des coordonnées GPS de véhicules. Aucun accès à la localisation de l'utilisateur demandé par OtterTransit.
+- Carte externe : fonctionnement réel et permission d'intégration non vérifiés depuis cet environnement sans accès réseau. Tests unitaires de l'horizon et syntaxe JS vérifiés localement. Aucun déploiement.

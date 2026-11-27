@@ -23,3 +23,11 @@ assert.deepEqual(migrateFavorites([{id:1,name:'Gare',line:'2',direction:'Villars
 assert.deepEqual(selectionsFromRoute({direction:'Gare'}),[{line:'',direction:'Gare'}]);
 assert.deepEqual(selectionsFromRoute({line:'2',direction:'Gare'}),[{line:'2',direction:'Gare'}]);
 console.log('Tests multi-lignes OK');
+
+// Horizon uses estimated departure, inclusive at 35 minutes, and hides past departures.
+const windowRows=[-1,0,30,35,35.01,367].map(m=>({...a,effective:ms+m*60000}));
+assert.deepEqual(routeVisible(windowRows,[],ms),windowRows.slice(1,4));
+assert.equal(routeVisible([{...b,effective:ms+36*60000}],[],ms).length,0);
+assert.equal(routeVisible([{...b,effective:ms+35*60000}],[],ms).length,1);
+assert.deepEqual(routeOptions([{...a,line:'42',effective:ms+367*60000}],[]).lines,['42']);
+console.log('Tests horizon 35 min OK');

@@ -19,7 +19,8 @@ export function routeOptions(rows,selections=[]){
   const destinations=line=>[...new Set([...rows.filter(r=>!line||r.line===line).map(r=>r.to),...selected.filter(r=>r.line===line).map(r=>r.direction)].filter(Boolean))].sort(sortText);
   return {lines,destinations};
 }
-export function routeVisible(rows,selections,now){const selected=normalizeSelections(selections);return visible(rows,'',now).filter(r=>!selected.length||selected.some(s=>(!s.line||r.line===s.line)&&(!s.direction||r.to===s.direction)));}
+export const BOARD_HORIZON_MINUTES=35;
+export function routeVisible(rows,selections,now){const selected=normalizeSelections(selections);return visible(rows,'',now).filter(r=>r.effective>=now&&r.effective<=now+BOARD_HORIZON_MINUTES*60000&&(!selected.length||selected.some(s=>(!s.line||r.line===s.line)&&(!s.direction||r.to===s.direction))));}
 export function toggleLine(selections,line){const selected=normalizeSelections(selections);if(!line)return [];const explicit=selected.filter(s=>s.line);return normalizeSelections(explicit.some(s=>s.line===line)?explicit.filter(s=>s.line!==line):[...explicit,{line,direction:''}]);}
 export function setDirection(selections,line,direction){return normalizeSelections([...normalizeSelections(selections).filter(s=>s.line!==line),{line,direction}]);}
 export function routeKey(r){return JSON.stringify([String(r.id),r.mode||'bus',selectionsFromRoute(r)]);}
