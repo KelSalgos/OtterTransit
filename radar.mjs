@@ -1,7 +1,7 @@
 // Native radar based on the Transport API map example (MIT; see THIRD_PARTY_NOTICES.md).
 import {decode,coord,kind,prepare,position,activeSegments} from './radar-core.mjs';
 const $=id=>document.getElementById(id),API='https://transport.opendata.ch/', CDN='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/';
-const views={board:['boardView','tabBoard'],journey:['journeyView','tabJourney'],radar:['radarView','tabRadar']};
+const views={board:['boardView','tabBoard'],journey:['journeyView','tabJourney'],radar:['radarView','tabRadar'],traffic:['trafficView','tabTraffic']};
 let active='board',map,stationLayer,vehicleLayer,stationCanvas,vehicleCanvas,grey,colour,stations=[],segments=[],markers=new Map(),tripLine,stationLoad,leafletLoad,ctrl,detailCtrl,moveTimer,refreshTimer,tickTimer,seq=0,initializing,updated=0,stale=false,stationError=false;
 const visible=()=>active==='radar'&&!document.hidden;
 const clock=x=>{const d=new Date(x);return Number.isFinite(+d)?new Intl.DateTimeFormat('fr-CH',{timeZone:'Europe/Zurich',hour:'2-digit',minute:'2-digit'}).format(d):'—'};
