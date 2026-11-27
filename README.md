@@ -1,4 +1,4 @@
-# OtterTransit v0.5 🦦
+# OtterTransit v0.6 🦦
 Page web statique, en français, pour les prochains départs en Suisse. Bus par défaut. Aucun compte ni clé API.
 
 ## Démarrer (Windows)
@@ -41,3 +41,6 @@ Temps de marche configurable, mode maison/boulot, intégration OtterHub. Histori
 - Seuls les départs effectifs entre maintenant et +35 minutes inclus sont affichés. Le filtrage se recalcule chaque seconde; les courses passées disparaissent. Les options de ligne/direction continuent d'utiliser les 40 départs obtenus de l'API, même au-delà de 35 min. Les itinéraires ne sont pas limités à 35 min.
 - Nouvel onglet Radar : intégration de la carte externe https://transport.opendata.ch/examples/map.html dans une iframe, chargée uniquement quand l'onglet est ouvert, retirée en quittant l'onglet ou lorsque la page est masquée. Le lien externe reste disponible si le fournisseur bloque l'intégration. Ce n'est pas une carte native OtterTransit, elle a ses propres contrôles et ne reprend pas automatiquement les favoris ni les filtres locaux. Les positions sont estimées, pas des coordonnées GPS de véhicules. Aucun accès à la localisation de l'utilisateur demandé par OtterTransit.
 - Carte externe : fonctionnement réel et permission d'intégration non vérifiés depuis cet environnement sans accès réseau. Tests unitaires de l'horizon et syntaxe JS vérifiés localement. Aucun déploiement.
+
+## v0.6 — Radar natif
+Carte Leaflet sans iframe, tuiles swisstopo, arrêts et véhicules estimés via /v2/map/stations, /vehicles et /trip. Filtres par type et nom/numéro de ligne (plusieurs séparés par virgules), recherche et centrage sur l'arrêt du tableau, détails des arrêts et courses, plein écran selon navigateur. Le radar interroge les véhicules toutes les 15 s et interpole toutes les secondes, uniquement en vue active; les positions ne sont pas du GPS. Les destinations du tableau ne sont pas automatiquement appliquées au radar (le segment fournit le prochain arrêt, pas le terminus). Les bus peuvent être représentés en ligne droite. En cas d'échec les positions sont masquées, la carte originale reste accessible. Les favoris restent locaux et les départs limités à 35 min. Tests purs : node radar.test.mjs. Les appels réseau et le rendu réel sont à vérifier sur GitHub Pages; Leaflet et les tuiles nécessitent Internet. Voir THIRD_PARTY_NOTICES.md.
