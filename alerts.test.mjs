@@ -35,3 +35,15 @@ assert.equal(separate.alerts[1].end,'2026-11-27T19:00:00.000Z');
 assert.equal(separate.alerts[0].approximate,true);
 assert.equal(matchingAlerts(separate,{operator:'TPF',line:'RE2',start:Date.parse('2026-11-27T19:30:00+01:00')},now).length,0);
 console.log('TPF period tests OK');
+
+const plannedFixture='Info trafic\nAucune perturbation sur le réseau TPF\nTravaux et manifestations\nInformations détaillées\nDu : 28.11.2026 - 04:00\nAu : 30.11.2026 - 02:00\nCause: travaux\nLa restriction dure du 28.11.2026, 04:00 au 30.11.2026, 02:00.\nLes lignes RE2 et RE3 sont concernées.\nDu : 26.11.2026 - 17:00\nAu : 04.12.2026 - 05:30\nCause: travaux\nLa restriction dure du 26.11.2026 au 04.12.2026, toujours de 17:00 à 05:30.\nLes lignes 9 sont concernées.\nDu : 05.12.2026 - 05:00\nAu : 05.12.2026 - 21:00\nCause: une manifestation\nLes lignes 2 et 6 sont concernées.';
+const pd=parseTpfText(plannedFixture,at);
+assert.equal(pd.status,'clear');assert.equal(pd.plannedStatus,'available');assert.equal(pd.planned.length,2);
+const atTime=s=>Date.parse('2026-11-'+s+':00+01:00');
+assert.equal(matchingAlerts(pd,{operator:'TPF',line:'RE2',start:atTime('28T04:30')},now).length,1);
+assert.equal(matchingAlerts(pd,{operator:'TPF',line:'9',start:atTime('28T12:00')},now).length,0);
+assert.equal(matchingAlerts(pd,{operator:'TPF',line:'9',start:atTime('28T18:00')},now).length,1);
+assert.equal(matchingAlerts(pd,{operator:'TPF',line:'9',start:atTime('28T02:00')},now).length,1);
+assert.equal(matchingAlerts(pd,{operator:'TL',line:'9',start:atTime('28T18:00')},now).length,0);
+assert.equal(parseTpfText('Info trafic\nAucune perturbation sur le réseau TPF\nTravaux et manifestations',at).plannedStatus,'unknown');
+console.log('TPF planned 48h tests OK');

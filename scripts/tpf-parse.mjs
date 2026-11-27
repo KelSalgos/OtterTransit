@@ -36,7 +36,7 @@ function notice(block,observedAt,i){
  const lines=distinct.size===1?[...new Set(groups[0])].sort((a,b)=>a.localeCompare(b,'fr',{numeric:true})):[];
  return {id:'tpf-current-'+i,lines,title:'Perturbation signalée sur le réseau TPF',...period(block,observedAt)};
 }
-export function parseTpfText(text,observedAt=new Date().toISOString()){
+function parseCurrent(text,observedAt=new Date().toISOString()){
  const clean=String(text).split(/\r?\n/).map(s=>s.replace(/\s+/g,' ').trim()).filter(Boolean);
  const begin=clean.findIndex(s=>/^info trafic$/i.test(s));
  const finish=clean.findIndex((s,i)=>i>begin&&/^travaux et manifestations$/i.test(s));
@@ -54,4 +54,58 @@ export function parseTpfText(text,observedAt=new Date().toISOString()){
  }
  const rest=section.slice(offset).trim();if(rest)blocks.push(rest);
  return {...base,status:'active',alerts:(blocks.length?blocks:[section]).map((b,i)=>notice(b,observedAt,i))};
+}
+
+const dateField='(\\d{2})[./](\\d{2})[./](\\d{4})\\s*[-–—,]\\s*(\\d{1,2})[:h](\\d{2})';
+function field(m,at){return localIso({day:m[at],month:m[at+1],year:m[at+2]},+m[at+3],+m[at+4])}
+function dayShift(p,n){const d=new Date(Date.UTC(+p.year,+p.month-1,+p.day+n));return {year:d.getUTCFullYear(),month:d.getUTCMonth()+1,day:d.getUTCDate()}}
+export function parsePlanned(text,observedAt){
+ const now=Date.parse(observedAt),horizon=now+48.5*3600000;
+ const section=String(text).split(/travaux et manifestations/i).at(-1);
+ const details=section.match(/informations détaillées/i);
+ if(!details||!Number.isFinite(now))return {plannedStatus:'unknown',planned:[]};
+ const body=section.slice(details.index+details[0].length).split(/questions fréquemment posées/i)[0];
+ const starts=[...body.matchAll(new RegExp('\\bDu\\s*:\\s*'+dateField,'gi'))];
+ const found=new Map();let skipped=0;
+ for(let i=0;i<starts.length;i++){
+  const m=starts[i],block=body.slice(m.index,starts[i+1]?.index??body.length);
+  const e=block.match(new RegExp('\\bAu\\s*:\\s*'+dateField,'i'));
+  const start=field(m,1),end=e?field(e,1):null;
+  if(!start||!end||Date.parse(end)<=Date.parse(start)){skipped++;continue}
+  const a=Date.parse(start),b=Date.parse(end);
+  if(b<=now||a>horizon)continue;
+  const lines=notice(block,observedAt,i).lines;
+  if(!lines.length)skipped++;
+  const cause=/cause\s*:\s*(?:une\s+)?manifestation/i.test(block)?'Manifestation':/cause\s*:\s*(?:des\s+)?travaux/i.test(block)?'Travaux':'Perturbation annoncée';
+  let windows=[],timing='unconfirmed';
+  const repeat=block.match(/toujours\s+de\s+(\d{1,2})[:h](\d{2})\s*à\s*(\d{1,2})[:h](\d{2})/i);
+  const restricted=/uniquement|sauf|les nuits|les lundis|les mardis|les mercredis|les jeudis|les vendredis|les samedis|les dimanches|jours ouvrables|week.end|du lundi|de lundi|chaque nuit|chaque jour/i.test(block);
+  if(repeat&&!restricted){
+   const h=+repeat[1],min=+repeat[2],eh=+repeat[3],em=+repeat[4];
+   if(h<24&&eh<24&&min<60&&em<60&&h*60+min!==eh*60+em){
+    const day=parts(new Date(Math.max(now,a)));
+    for(let n=-1;n<=4;n++){
+     const p=dayShift(day,n),q=dayShift(p,eh*60+em<h*60+min?1:0);
+     const s=Date.parse(localIso(p,h,min)),t=Date.parse(localIso(q,eh,em));
+     const lo=Math.max(a,s),hi=Math.min(b,t);
+     if(Number.isFinite(lo)&&Number.isFinite(hi)&&hi>lo&&hi>now&&lo<=horizon)windows.push({start:new Date(lo).toISOString(),end:new Date(hi).toISOString()});
+    }
+    timing='daily';
+   }
+  }else if(!restricted&&!repeat){
+   // Only assert a continuous interval when the prose explicitly confirms it,
+   // or the two bounds are on the same Swiss calendar day.
+   const pa=parts(new Date(a)),pb=parts(new Date(b));
+   const sameDay=pa.year===pb.year&&pa.month===pb.month&&pa.day===pb.day;
+   const continuous=/la restriction dure du\s+\d{2}[./]\d{2}[./]\d{4}\s*,\s*\d{1,2}:\d{2}\s+au\s+\d{2}[./]\d{2}[./]\d{4}\s*,\s*\d{1,2}:\d{2}\s*\./i.test(block);
+   if(sameDay||continuous){windows=[{start,end}];timing='continuous'}
+  }
+  if(timing==='daily'&&!windows.length)continue;
+  const key=JSON.stringify([lines,start,end,cause,timing,windows]);
+  found.set(key,{id:'tpf-planned-'+i,lines,start,end,cause,timing,windows});
+ }
+ return {plannedStatus:starts.length?(skipped?'partial':'available'):'unknown',planned:[...found.values()].sort((a,b)=>Date.parse(a.start)-Date.parse(b.start))};
+}
+export function parseTpfText(text,observedAt=new Date().toISOString()){
+ return {...parseCurrent(text,observedAt),...parsePlanned(text,observedAt),coverage:'current-and-planned-48h'};
 }
