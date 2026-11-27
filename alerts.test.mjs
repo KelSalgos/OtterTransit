@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {parseTpfText} from './scripts/tpf-parse.mjs';
+import {parseTpfText,incidentSummary} from './scripts/tpf-parse.mjs';
 import {matchingAlerts,feedState,isTPF} from './alerts-core.mjs';
 const now=Date.parse('2026-11-27T17:00:00+01:00'),at=new Date(now).toISOString();
 const fixture='Info trafic\nPerturbations en cours sur le réseau TPF\nService restreint lignes 1, 2, 6 et 11.\nTravaux et manifestations\nligne 9';
@@ -55,3 +55,15 @@ assert.equal(matchingAlerts(userData,{operator:'TPF',line:'B 336',start:atTime('
 assert.equal(matchingAlerts(userData,{operator:'TPF',line:'B 337',start:atTime('27T22:08'),end:atTime('27T23:06')},now).length,0);
 assert.equal(parseTpfText(userFixture.replace('Informations détaillées','Informations détaillées\nOTTER_PARTIAL_COVERAGE'),at).plannedStatus,'partial');
 console.log('TPF 336 regression tests OK');
+
+const headlineFixture=userFixture.replace('En cours\nLa restriction dure du 27.08','En cours\nL’arrêt Gumefens, village est déplacé direction Bulle, gare routière.\nLa restriction dure du 27.08').replace('En cours\nLa restriction dure du 26.03','En cours\nL’arrêt Vuippens, village est déplacé.\nLa restriction dure du 26.03');
+const withHeadlines=parseTpfText(headlineFixture,at);
+assert.equal(withHeadlines.planned.find(x=>x.lines.includes('N25')).summary,'Arrêt Vuippens, village déplacé');
+assert.equal(withHeadlines.planned.find(x=>x.lines.length===1).summary,'Arrêt Gumefens, village déplacé · direction Bulle, gare routière');
+assert.equal(matchingAlerts(withHeadlines,{operator:'TPF',line:'B 336',start:atTime('27T22:08'),end:atTime('27T23:06')},now).length,2);
+assert.equal(incidentSummary('À venir L’arrêt X ne sera pas desservi. La restriction dure ...'),'Arrêt X non desservi');
+assert.equal(incidentSummary('En cours Les lignes 2 et 6 sont déviées. La restriction dure ...'),'Déviation · 2 et 6');
+assert.equal(incidentSummary('En cours La restriction dure ...'),null);
+assert.equal(incidentSummary('En cours Veuillez consulter notre site. La restriction dure ...'),null);
+assert.equal(incidentSummary('En cours L’arrêt X est déplacé. La restriction dure ...'),'Arrêt X déplacé');
+console.log('TPF incident summaries OK');

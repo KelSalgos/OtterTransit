@@ -59,3 +59,6 @@ Collecte prévue toutes les 15 minutes via GitHub Actions (sans garantie de ponc
 
 ## v0.9.1 — Correction du collecteur
 Le runner est fixé à Ubuntu 24.04 pour Playwright. Le navigateur tente les filtres de lignes publics et fusionne les fiches extraites; une couverture partielle est signalée. Test de régression sur les deux travaux de longue durée de la ligne 336 signalés par un utilisateur. Les interactions sur le site réel restent à valider. La programmation aux quarts d'heure est conservée.
+
+## v0.9.2 — Motif concret des perturbations
+Le collecteur extrait le titre factuel court placé entre le statut et le texte de période, et reformule notamment les déplacements d'arrêts, arrêts non desservis et déviations. Le champ facultatif summary est affiché dans Trafic et sous les départs/étapes concernés (deux résumés maximum en ligne, avec dates). Les anciens JSON et les titres non reconnus gardent un motif générique. La déduplication distingue les résumés différents pour une même période et ligne. Pas d'inférence sur l'arrêt effectivement emprunté; pas de reproduction des communiqués complets. Collecte aux quarts d'heure inchangée.

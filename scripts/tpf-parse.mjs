@@ -1,4 +1,4 @@
-// Factual line and time identifiers only; no original notice prose is republished.
+// Factual identifiers and short incident summaries; no full notice prose.
 const zone='Europe/Zurich';
 function parts(date){return Object.fromEntries(new Intl.DateTimeFormat('en-GB',{timeZone:zone,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(date).map(x=>[x.type,x.value]))}
 function localIso(date,h,m){
@@ -27,6 +27,28 @@ function period(block,observedAt){
  }
  return {start:null,end:null,approximate:false};
 }
+// Extract a bounded headline from the flattened card, then reformulate known facts.
+export function incidentSummary(block){
+ const text=String(block).replace(/\s+/g,' ').trim();
+ const m=text.match(/(?:^|\s)(?:En cours|À venir|A venir|Prochainement)\s+(.{1,220}?)\s+(?=La restriction\b|Les? lignes?\b|Dernière mise à jour\b)/i);
+ let headline=m?.[1]?.trim();
+ if(!headline)return null;
+ headline=headline.replace(/\.$/,'').trim();
+ if(headline.length>180||headline.split(/\s+/).length>24)return null;
+ const moved=headline.match(/^L[’']arrêt\s+(.+?)\s+est\s+déplacé(?:\s+(?:en\s+)?direction\s+(.+))?$/i);
+ if(moved)return 'Arrêt '+moved[1]+' déplacé'+(moved[2]?' · direction '+moved[2]:'');
+ const missing=headline.match(/^L[’']arrêt\s+(.+?)\s+(?:n[’']est pas|n[’']est plus|ne sera pas|est non)\s+desservi$/i);
+ if(missing)return 'Arrêt '+missing[1]+' non desservi';
+ const plural=headline.match(/^Les arrêts\s+(.+?)\s+(?:ne sont pas|ne sont plus|ne seront pas|sont non)\s+desservis$/i);
+ if(plural)return 'Arrêts non desservis : '+plural[1];
+ const movedPlural=headline.match(/^Les arrêts\s+(.+?)\s+sont\s+déplacés$/i);
+ if(movedPlural)return 'Arrêts déplacés : '+movedPlural[1];
+ const diversion=headline.match(/^(?:La ligne|Les lignes)\s+(.+?)\s+(?:est déviée|sont déviées|est dévié|sont déviés)(.*)$/i);
+ if(diversion)return 'Déviation · '+diversion[1]+(diversion[2]||'');
+ if(/^(?:Déviation|Suppression|Interruption|Service restreint|Trafic perturbé|Arrêt déplacé|Arrêt non desservi|Circulation interrompue|Travaux|Retards|Bus de remplacement|Remplacement par bus)\b/i.test(headline)&&!/\b(?:veuillez|cliquez|consultez|merci)\b/i.test(headline))return headline;
+ return null;
+}
+
 function notice(block,observedAt,i){
  const token='(?:[A-Z]{0,3}\\d{1,4})';
  const pattern=new RegExp('\\blignes?\\s*(?:n(?:°|º|o)\\s*)?('+token+'(?:(?:\\s*[,;/]\\s*|\\s+(?:et|ou)\\s+|[ \\t]+)'+token+')*)(?![\\w:])','gi');
@@ -34,7 +56,7 @@ function notice(block,observedAt,i){
  const distinct=new Set(groups.map(g=>JSON.stringify([...new Set(g)])));
  // Different scopes in an unseparated notice are ambiguous: show only a general warning.
  const lines=distinct.size===1?[...new Set(groups[0])].sort((a,b)=>a.localeCompare(b,'fr',{numeric:true})):[];
- return {id:'tpf-current-'+i,lines,title:'Perturbation signalée sur le réseau TPF',...period(block,observedAt)};
+ return {id:'tpf-current-'+i,lines,title:'Perturbation signalée sur le réseau TPF',summary:incidentSummary(block),...period(block,observedAt)};
 }
 function parseCurrent(text,observedAt=new Date().toISOString()){
  const clean=String(text).split(/\r?\n/).map(s=>s.replace(/\s+/g,' ').trim()).filter(Boolean);
@@ -101,8 +123,9 @@ export function parsePlanned(text,observedAt){
    if(sameDay||continuous){windows=[{start,end}];timing='continuous'}
   }
   if(timing==='daily'&&!windows.length)continue;
-  const key=JSON.stringify([lines,start,end,cause,timing,windows]);
-  found.set(key,{id:'tpf-planned-'+i,lines,start,end,cause,timing,windows});
+  const summary=incidentSummary(block);
+  const key=JSON.stringify([lines,start,end,cause,timing,windows,summary]);
+  found.set(key,{id:'tpf-planned-'+i,lines,start,end,cause,timing,windows,summary});
  }
  return {plannedStatus:starts.length?(skipped?'partial':'available'):'unknown',planned:[...found.values()].sort((a,b)=>Date.parse(a.start)-Date.parse(b.start))};
 }
