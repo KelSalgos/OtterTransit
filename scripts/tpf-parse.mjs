@@ -37,10 +37,10 @@ export function incidentSummary(block){
  if(headline.length>180||headline.split(/\s+/).length>24)return null;
  const moved=headline.match(/^L[’']arrêt\s+(.+?)\s+est\s+déplacé(?:\s+(?:en\s+)?direction\s+(.+))?$/i);
  if(moved)return 'Arrêt '+moved[1]+' déplacé'+(moved[2]?' · direction '+moved[2]:'');
- const missing=headline.match(/^L[’']arrêt\s+(.+?)\s+(?:n[’']est pas|n[’']est plus|ne sera pas|est non)\s+desservi$/i);
- if(missing)return 'Arrêt '+missing[1]+' non desservi';
- const plural=headline.match(/^Les arrêts\s+(.+?)\s+(?:ne sont pas|ne sont plus|ne seront pas|sont non)\s+desservis$/i);
- if(plural)return 'Arrêts non desservis : '+plural[1];
+ const missing=headline.match(/^L[’']arrêt\s+(.+?)\s+(?:n[’']est pas|n[’']est plus|ne sera pas|est non)\s+desservi(?:\s+(?:en\s+)?direction\s+(.+))?$/i);
+ if(missing)return 'Arrêt '+missing[1]+' non desservi'+(missing[2]?' · direction '+missing[2]:'');
+ const plural=headline.match(/^Les arrêts\s+(.+?)\s+(?:ne sont pas|ne sont plus|ne seront pas|sont non)\s+desservis(?:\s+(?:en\s+)?direction\s+(.+))?$/i);
+ if(plural)return 'Arrêts non desservis : '+plural[1]+(plural[2]?' · direction '+plural[2]:'');
  const movedPlural=headline.match(/^Les arrêts\s+(.+?)\s+sont\s+déplacés$/i);
  if(movedPlural)return 'Arrêts déplacés : '+movedPlural[1];
  const diversion=headline.match(/^(?:La ligne|Les lignes)\s+(.+?)\s+(?:est déviée|sont déviées|est dévié|sont déviés)(.*)$/i);
@@ -120,7 +120,10 @@ export function parsePlanned(text,observedAt){
    const pa=parts(new Date(a)),pb=parts(new Date(b));
    const sameDay=pa.year===pb.year&&pa.month===pb.month&&pa.day===pb.day;
    const continuous=/la restriction dure du\s+\d{2}[./]\d{2}[./]\d{4}\s*,\s*\d{1,2}:\d{2}\s+au\s+\d{2}[./]\d{2}[./]\d{4}\s*,\s*\d{1,2}:\d{2}\s*\./i.test(block);
-   if(sameDay||continuous){windows=[{start,end}];timing='continuous'}
+   const until=block.match(/\bla restriction dure jusqu[’']au\s+(\d{2})[./](\d{2})[./](\d{4})\s*,\s*(\d{1,2}):(\d{2})\s*\./i);
+   const confirmedEnd=until&&field(until,1)===end&&/\bEn cours\b/i.test(block)&&a<=now&&now<b;
+   const otherTiming=/\b(?:de|entre)\s+\d{1,2}[:h]\d{2}\s*(?:à|et|–|-)\s*\d{1,2}[:h]\d{2}|\b(?:certains jours|par intermittence|en soirée|en journée|horaires variables)\b/i.test(block);
+   if(sameDay||continuous||(confirmedEnd&&!otherTiming)){windows=[{start,end}];timing='continuous'}
   }
   if(timing==='daily'&&!windows.length)continue;
   const summary=incidentSummary(block);

@@ -67,3 +67,16 @@ assert.equal(incidentSummary('En cours La restriction dure ...'),null);
 assert.equal(incidentSummary('En cours Veuillez consulter notre site. La restriction dure ...'),null);
 assert.equal(incidentSummary('En cours L’arrêt X est déplacé. La restriction dure ...'),'Arrêt X déplacé');
 console.log('TPF incident summaries OK');
+
+const line6='Info trafic\nAucune perturbation sur le réseau TPF\nTravaux et manifestations\nInformations détaillées\nDu : 27.04.2026 - 04:00\nAu : 26.03.2027 - 17:00\nCause: travaux\nEn cours\nLes arrêts Fribourg, Route-de-Tavel | Vieux-Chênes | Musy 24 ne sont pas desservis direction Fribourg, Musy 24.\nLa restriction dure jusqu’au 26.03.2027, 17:00.\nLa ligne 6 est concernée.\nHoraire en ligne adapté\nLa ligne 6 est déviée et dessert exceptionnellement Fribourg, Bellevue.';
+const six=parseTpfText(line6,at);
+assert.equal(six.planned[0].summary,'Arrêts non desservis : Fribourg, Route-de-Tavel | Vieux-Chênes | Musy 24 · direction Fribourg, Musy 24');
+assert.equal(six.planned[0].timing,'continuous');
+assert.deepEqual(six.planned[0].lines,['6']);
+assert.equal(matchingAlerts(six,{...trip,line:'B 6'},now).length,1);
+assert.equal(matchingAlerts(six,{...trip,line:'B 2'},now).length,0);
+assert.equal(parseTpfText(line6.replace('26.03.2027, 17:00.','25.03.2027, 17:00.'),at).planned[0].timing,'unconfirmed');
+assert.equal(parseTpfText(line6+' Uniquement les samedis.',at).planned[0].timing,'unconfirmed');
+assert.equal(parseTpfText(line6+' De 08:00 à 16:00.',at).planned[0].timing,'unconfirmed');
+assert.equal(incidentSummary('En cours L’arrêt X n’est pas desservi direction Y. La restriction dure ...'),'Arrêt X non desservi · direction Y');
+console.log('TPF line 6 regression OK');
