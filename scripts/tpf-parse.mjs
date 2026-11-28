@@ -30,7 +30,7 @@ function period(block,observedAt){
 // Extract a bounded headline from the flattened card, then reformulate known facts.
 export function incidentSummary(block){
  const text=String(block).replace(/\s+/g,' ').trim();
- const m=text.match(/(?:^|\s)(?:En cours|À venir|A venir|Prochainement)\s+(.{1,220}?)\s+(?=La restriction\b|Les? lignes?\b|Dernière mise à jour\b)/i);
+ const m=text.match(/(?:^|\s)(?:En cours|À venir|A venir|Prochainement)\s+(.{1,220}?)\s+(?=La restriction\b|(?:La ligne|Les lignes)\s+[A-Z]{0,3}\d{1,4}(?:\s*(?:[,;/]|\bet\b|\bou\b)\s*[A-Z]{0,3}\d{1,4})*\s+(?:est concernée|sont concernées)\b|Dernière mise à jour\b|Veuillez\b|Horaire en ligne\b)/i);
  let headline=m?.[1]?.trim();
  if(!headline)return null;
  headline=headline.replace(/\.$/,'').trim();
@@ -43,6 +43,10 @@ export function incidentSummary(block){
  if(plural)return 'Arrêts non desservis : '+plural[1]+(plural[2]?' · direction '+plural[2]:'');
  const movedPlural=headline.match(/^Les arrêts\s+(.+?)\s+sont\s+déplacés$/i);
  if(movedPlural)return 'Arrêts déplacés : '+movedPlural[1];
+ const service=headline.match(/^(?:Le service (?:de bus|ferroviaire|de train|de tram)|La circulation (?:des bus|des trains|des trams)|Le trafic (?:ferroviaire|des bus|routier))\s*(?:de la ligne\s+([A-Z]{0,3}\d{1,4})\s+)?(?:entre\s+(.+?)\s+)?(?:est|sera)\s+(interrompu[e]?|restreint[e]?|perturbé[e]?|suspendu[e]?)\s*$/i);
+ if(service){const state=service[3].toLowerCase();const kind=/^(?:interrompu|suspendu)/.test(state)?'Interruption':state.startsWith('restreint')?'Service restreint':'Trafic perturbé';return kind+(service[1]?' · ligne '+service[1]:'')+(service[2]?' entre '+service[2]:'');}
+ const serviceAfter=headline.match(/^(?:Le trafic ferroviaire|Le service (?:de bus|ferroviaire|de train|de tram)|La circulation (?:des bus|des trains|des trams))\s+(?:est|sera)\s+(interrompu[e]?|restreint[e]?|perturbé[e]?|suspendu[e]?)\s+entre\s+(.+)$/i);
+ if(serviceAfter){const state=serviceAfter[1].toLowerCase();const kind=/^(?:interrompu|suspendu)/.test(state)?'Interruption':state.startsWith('restreint')?'Service restreint':'Trafic perturbé';return kind+' entre '+serviceAfter[2];}
  const diversion=headline.match(/^(?:La ligne|Les lignes)\s+(.+?)\s+(?:est déviée|sont déviées|est dévié|sont déviés)(.*)$/i);
  if(diversion)return 'Déviation · '+diversion[1]+(diversion[2]||'');
  if(/^(?:Déviation|Suppression|Interruption|Service restreint|Trafic perturbé|Arrêt déplacé|Arrêt non desservi|Circulation interrompue|Travaux|Retards|Bus de remplacement|Remplacement par bus)\b/i.test(headline)&&!/\b(?:veuillez|cliquez|consultez|merci)\b/i.test(headline))return headline;

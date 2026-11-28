@@ -80,3 +80,14 @@ assert.equal(parseTpfText(line6+' Uniquement les samedis.',at).planned[0].timing
 assert.equal(parseTpfText(line6+' De 08:00 à 16:00.',at).planned[0].timing,'unconfirmed');
 assert.equal(incidentSummary('En cours L’arrêt X n’est pas desservi direction Y. La restriction dure ...'),'Arrêt X non desservi · direction Y');
 console.log('TPF line 6 regression OK');
+
+const serviceFixture='Info trafic\nAucune perturbation sur le réseau TPF\nTravaux et manifestations\nInformations détaillées\nDu : 19.10.2026 - 07:00\nAu : 31.12.2026 - 17:00\nCause: travaux\nEn cours\nLe service de bus de la ligne 9 entre Givisiez, rte des Fluides et Corminboeuf, Jo-Siffert est interrompu.\nLa restriction dure jusqu’au 31.12.2026, 17:00.\nVeuillez vous rendre à l’arrêt Givisiez, rte des Fluides\nLa ligne 9 est déviée et ne dessert pas exceptionnellement Corminboeuf, Jo-Siffert\nDu : 18.10.2026 - 22:30\nAu : 17.12.2026 - 23:45\nCause: travaux\nEn cours\nLe trafic ferroviaire est restreint entre Romont FR et Fribourg/Freiburg.\nLa restriction dure du 18.10.2026 au 18.12.2026, toujours du dimanche au jeudi.\nLes lignes RE2 et RE3 sont concernées.';
+const serviceData=parseTpfText(serviceFixture,at);
+assert.equal(serviceData.planned.find(x=>x.lines.includes('9')).summary,'Interruption · ligne 9 entre Givisiez, rte des Fluides et Corminboeuf, Jo-Siffert');
+assert.equal(serviceData.planned.find(x=>x.lines.includes('9')).timing,'continuous');
+assert.equal(serviceData.planned.find(x=>x.lines.includes('RE2')).summary,'Service restreint entre Romont FR et Fribourg/Freiburg');
+assert.equal(serviceData.planned.find(x=>x.lines.includes('RE2')).timing,'unconfirmed');
+assert.equal(incidentSummary('En cours Le trafic ferroviaire est interrompu entre X et Y. La restriction dure ...'),'Interruption entre X et Y');
+assert.equal(incidentSummary('En cours Le service de bus de la ligne 9 entre X et Y est suspendu. La ligne 9 est concernée.'),'Interruption · ligne 9 entre X et Y');
+assert.equal(incidentSummary('En cours La circulation des trains entre X et Y est perturbée. La restriction dure ...'),'Trafic perturbé entre X et Y');
+console.log('TPF interruption and restriction regression OK');
