@@ -1,13 +1,13 @@
 {
   "version": 1,
-  "observedAt": "2026-11-28T03:21:09.541Z",
+  "observedAt": "2026-11-28T12:12:57.424Z",
   "status": "clear",
   "alerts": [],
   "coverage": "current-and-planned-48h",
   "plannedStatus": "partial",
   "planned": [
     {
-      "id": "tpf-planned-22",
+      "id": "tpf-planned-14",
       "lines": [
         "336",
         "471",
@@ -26,7 +26,7 @@
       "summary": "Arrêt Vuippens, village déplacé"
     },
     {
-      "id": "tpf-planned-21",
+      "id": "tpf-planned-20",
       "lines": [
         "553"
       ],
@@ -43,7 +43,7 @@
       "summary": "Arrêt Font, village non desservi"
     },
     {
-      "id": "tpf-planned-20",
+      "id": "tpf-planned-4",
       "lines": [
         "6"
       ],
@@ -55,7 +55,7 @@
       "summary": null
     },
     {
-      "id": "tpf-planned-19",
+      "id": "tpf-planned-8",
       "lines": [
         "9"
       ],
@@ -72,7 +72,7 @@
       "summary": "Arrêt Fribourg, Jardin botanique direction Villars-sur-Glâne,Petit-Moncor non desservi"
     },
     {
-      "id": "tpf-planned-18",
+      "id": "tpf-planned-13",
       "lines": [
         "336"
       ],
@@ -89,7 +89,7 @@
       "summary": "Arrêt Gumefens, village déplacé · direction Bulle, gare routière"
     },
     {
-      "id": "tpf-planned-17",
+      "id": "tpf-planned-9",
       "lines": [],
       "start": "2026-08-27T05:00:00.000Z",
       "end": "2026-12-05T06:00:00.000Z",
@@ -104,7 +104,7 @@
       "summary": null
     },
     {
-      "id": "tpf-planned-16",
+      "id": "tpf-planned-12",
       "lines": [
         "259"
       ],
@@ -116,7 +116,7 @@
       "summary": "Arrêt Boltigen, Reidenbach déplacé · direction Boltigen, Bahnhof"
     },
     {
-      "id": "tpf-planned-15",
+      "id": "tpf-planned-7",
       "lines": [
         "9"
       ],
@@ -133,7 +133,7 @@
       "summary": "Arrêt Granges-Paccot, Chantemerle déplacé"
     },
     {
-      "id": "tpf-planned-14",
+      "id": "tpf-planned-22",
       "lines": [
         "RE2",
         "RE3"
@@ -146,7 +146,7 @@
       "summary": null
     },
     {
-      "id": "tpf-planned-13",
+      "id": "tpf-planned-6",
       "lines": [
         "9"
       ],
@@ -158,7 +158,7 @@
       "summary": null
     },
     {
-      "id": "tpf-planned-12",
+      "id": "tpf-planned-16",
       "lines": [
         "474"
       ],
@@ -175,7 +175,7 @@
       "summary": "Arrêt Moudon, Sorbiers non desservi"
     },
     {
-      "id": "tpf-planned-11",
+      "id": "tpf-planned-15",
       "lines": [
         "340",
         "361",
@@ -188,10 +188,6 @@
       "timing": "daily",
       "windows": [
         {
-          "start": "2026-11-27T16:00:00.000Z",
-          "end": "2026-11-28T04:30:00.000Z"
-        },
-        {
           "start": "2026-11-28T16:00:00.000Z",
           "end": "2026-11-29T04:30:00.000Z"
         },
@@ -203,7 +199,7 @@
       "summary": "Arrêt Grolley, gare déplacé"
     },
     {
-      "id": "tpf-planned-9",
+      "id": "tpf-planned-18",
       "lines": [
         "496"
       ],
@@ -220,7 +216,7 @@
       "summary": "Arrêt Fiaugères, croisée déplacé"
     },
     {
-      "id": "tpf-planned-10",
+      "id": "tpf-planned-19",
       "lines": [
         "496"
       ],
@@ -237,7 +233,7 @@
       "summary": null
     },
     {
-      "id": "tpf-planned-8",
+      "id": "tpf-planned-21",
       "lines": [
         "RE2",
         "RE3"
@@ -255,7 +251,7 @@
       "summary": null
     },
     {
-      "id": "tpf-planned-7",
+      "id": "tpf-planned-17",
       "lines": [
         "479"
       ],
