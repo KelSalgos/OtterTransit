@@ -1,13 +1,13 @@
 {
   "version": 1,
-  "observedAt": "2026-11-28T18:01:14.360Z",
+  "observedAt": "2026-11-28T18:08:11.707Z",
   "status": "clear",
   "alerts": [],
   "coverage": "current-and-planned-48h",
   "plannedStatus": "partial",
   "planned": [
     {
-      "id": "tpf-planned-14",
+      "id": "tpf-planned-21",
       "lines": [
         "336",
         "471",
@@ -26,7 +26,7 @@
       "summary": "Arrêt Vuippens, village déplacé"
     },
     {
-      "id": "tpf-planned-19",
+      "id": "tpf-planned-20",
       "lines": [
         "553"
       ],
@@ -43,19 +43,24 @@
       "summary": "Arrêt Font, village non desservi"
     },
     {
-      "id": "tpf-planned-4",
+      "id": "tpf-planned-19",
       "lines": [
         "6"
       ],
       "start": "2026-04-27T02:00:00.000Z",
       "end": "2027-03-26T16:00:00.000Z",
       "cause": "Travaux",
-      "timing": "unconfirmed",
-      "windows": [],
-      "summary": null
+      "timing": "continuous",
+      "windows": [
+        {
+          "start": "2026-04-27T02:00:00.000Z",
+          "end": "2027-03-26T16:00:00.000Z"
+        }
+      ],
+      "summary": "Arrêts non desservis : Fribourg, Route-de-Tavel | Vieux-Chênes | Musy 24 · direction Fribourg, Musy 24"
     },
     {
-      "id": "tpf-planned-8",
+      "id": "tpf-planned-18",
       "lines": [
         "9"
       ],
@@ -72,7 +77,7 @@
       "summary": "Arrêt Fribourg, Jardin botanique direction Villars-sur-Glâne,Petit-Moncor non desservi"
     },
     {
-      "id": "tpf-planned-13",
+      "id": "tpf-planned-17",
       "lines": [
         "336"
       ],
@@ -89,7 +94,7 @@
       "summary": "Arrêt Gumefens, village déplacé · direction Bulle, gare routière"
     },
     {
-      "id": "tpf-planned-9",
+      "id": "tpf-planned-16",
       "lines": [],
       "start": "2026-08-27T05:00:00.000Z",
       "end": "2026-12-05T06:00:00.000Z",
@@ -104,19 +109,24 @@
       "summary": null
     },
     {
-      "id": "tpf-planned-12",
+      "id": "tpf-planned-15",
       "lines": [
         "259"
       ],
       "start": "2026-09-28T07:00:00.000Z",
       "end": "2026-12-01T16:00:00.000Z",
       "cause": "Travaux",
-      "timing": "unconfirmed",
-      "windows": [],
+      "timing": "continuous",
+      "windows": [
+        {
+          "start": "2026-09-28T07:00:00.000Z",
+          "end": "2026-12-01T16:00:00.000Z"
+        }
+      ],
       "summary": "Arrêt Boltigen, Reidenbach déplacé · direction Boltigen, Bahnhof"
     },
     {
-      "id": "tpf-planned-7",
+      "id": "tpf-planned-14",
       "lines": [
         "9"
       ],
@@ -133,7 +143,7 @@
       "summary": "Arrêt Granges-Paccot, Chantemerle déplacé"
     },
     {
-      "id": "tpf-planned-21",
+      "id": "tpf-planned-13",
       "lines": [
         "RE2",
         "RE3"
@@ -146,19 +156,24 @@
       "summary": null
     },
     {
-      "id": "tpf-planned-6",
+      "id": "tpf-planned-12",
       "lines": [
         "9"
       ],
       "start": "2026-10-19T05:00:00.000Z",
       "end": "2026-12-31T16:00:00.000Z",
       "cause": "Travaux",
-      "timing": "unconfirmed",
-      "windows": [],
+      "timing": "continuous",
+      "windows": [
+        {
+          "start": "2026-10-19T05:00:00.000Z",
+          "end": "2026-12-31T16:00:00.000Z"
+        }
+      ],
       "summary": null
     },
     {
-      "id": "tpf-planned-16",
+      "id": "tpf-planned-11",
       "lines": [
         "474"
       ],
@@ -175,7 +190,7 @@
       "summary": "Arrêt Moudon, Sorbiers non desservi"
     },
     {
-      "id": "tpf-planned-15",
+      "id": "tpf-planned-10",
       "lines": [
         "340",
         "361",
@@ -203,7 +218,7 @@
       "summary": "Arrêt Grolley, gare déplacé"
     },
     {
-      "id": "tpf-planned-17",
+      "id": "tpf-planned-8",
       "lines": [
         "496"
       ],
@@ -220,7 +235,7 @@
       "summary": "Arrêt Fiaugères, croisée déplacé"
     },
     {
-      "id": "tpf-planned-18",
+      "id": "tpf-planned-9",
       "lines": [
         "496"
       ],
@@ -237,7 +252,7 @@
       "summary": null
     },
     {
-      "id": "tpf-planned-20",
+      "id": "tpf-planned-7",
       "lines": [
         "RE2",
         "RE3"
