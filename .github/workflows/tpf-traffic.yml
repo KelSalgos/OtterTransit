@@ -10,7 +10,8 @@ on:
       - 'scripts/collect-tpf-browser.py'
       - 'scripts/tpf-parse.mjs'
   schedule:
-    - cron: '0,15,30,45 * * * *'
+    # Avoid the usual quarter-hour schedule peaks; execution remains best-effort.
+    - cron: '7,22,37,52 * * * *'
 permissions:
   contents: write
 concurrency:

@@ -62,3 +62,6 @@ Le runner est fixé à Ubuntu 24.04 pour Playwright. Le navigateur tente les fil
 
 ## v0.9.2 — Motif concret des perturbations
 Le collecteur extrait le titre factuel court placé entre le statut et le texte de période, et reformule notamment les déplacements d'arrêts, arrêts non desservis et déviations. Le champ facultatif summary est affiché dans Trafic et sous les départs/étapes concernés (deux résumés maximum en ligne, avec dates). Les anciens JSON et les titres non reconnus gardent un motif générique. La déduplication distingue les résumés différents pour une même période et ligne. Pas d'inférence sur l'arrêt effectivement emprunté; pas de reproduction des communiqués complets. Collecte aux quarts d'heure inchangée.
+
+## Maintenance du collecteur TPF
+Les déclenchements GitHub Actions sont décalés aux minutes 07, 22, 37 et 52 pour réduire les risques de saturation des créneaux habituels. La fréquence cible reste de 15 minutes, sans garantie de ponctualité. Les données de plus de 30 minutes restent considérées comme anciennes. Un lancement manuel du workflow est possible depuis Actions si nécessaire.
